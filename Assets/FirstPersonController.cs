@@ -9,25 +9,33 @@ public class FirstPersonController : MonoBehaviour
     public float sensitivity;
     private float pitch;
     private Vector2 direction;
+    private Vector2 mouseposition;
+    public Vector2 updownrestriction;
     // Start is called before the first frame update
     void Start()
     {
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        
     }
     private Vector2 lastFramePos;
     void Update()
     {
-        Vector2 pos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        
+       
+        
+        //Vector2 pos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
-        Vector2 delta = pos - lastFramePos;
-
+        //Vector2 delta = pos - lastFramePos;
+        mouseposition.x = Input.mousePosition.x;
+        mouseposition.y = Input.mousePosition.y;
         transform.Rotate(Vector3.up * sensitivity *Input.GetAxis("Mouse X"));
+        mouseposition.y = Mathf.Clamp(mouseposition.y, updownrestriction.y, updownrestriction.x);
+        transform.localRotation = Quaternion.Euler(-mouseposition.y, mouseposition.x, 0);
 
         pitch -= sensitivity * Input.GetAxis("Mouse Y");
         pitch = Mathf.Clamp(pitch, -90, 90);
         Camera.main.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
-        lastFramePos = pos;
+        //lastFramePos = pos;
         float x = 0;
             float y = 0;
         if (Input.GetKey("w"))
